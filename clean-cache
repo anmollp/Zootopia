@@ -1,0 +1,15 @@
+#!/bin/sh
+mkdir -p data
+cd data
+
+while IFS='$\n' read -r line; do
+# Ignore unnecessary information
+	if [ $(echo $line | cut -d " " -f2) = "<http://purl.org/pav/hasVersion>" ]
+	then
+	# Keep the newest 5 files, delete everything else
+		rm -rf $(ls -1t */*/* | tail -n +11)
+
+	# Echo stdin to stdout
+		printf "%s\n" "$line"
+	fi
+done
